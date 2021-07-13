@@ -1,5 +1,5 @@
 module.exports = {
   reactStrictMode: true,
-  basePath: '/deutsch-lernen/online',
-  assetPrefix: '/deutsch-lernen/online/'
+  basePath: '/deutsch-lernen/docs',
+  assetPrefix: '/deutsch-lernen/docs/'
 }
