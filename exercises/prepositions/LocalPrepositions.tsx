@@ -35,6 +35,7 @@ import { Text } from "components/Text";
  */
 
 export const LocalPrepositions = [
+  // eslint-disable-next-line react/jsx-key
   <Sequence>
     <CompleteText>
       <Text>
@@ -52,6 +53,7 @@ export const LocalPrepositions = [
     </CompleteText>
   </Sequence>,
 
+  // eslint-disable-next-line react/jsx-key
   <Sequence>
     <CompleteText>
       <Text>
@@ -68,6 +70,7 @@ export const LocalPrepositions = [
     </CompleteText>
   </Sequence>,
 
+  // eslint-disable-next-line react/jsx-key
   <Sequence>
     <CompleteText>
       <Text>
@@ -82,6 +85,7 @@ export const LocalPrepositions = [
     </CompleteText>
   </Sequence>,
 
+  // eslint-disable-next-line react/jsx-key
   <Sequence>
     <CompleteText>
       <Text>
@@ -101,6 +105,7 @@ export const LocalPrepositions = [
     </CompleteText>
   </Sequence>,
 
+  // eslint-disable-next-line react/jsx-key
   <CompleteText>
     <Text>
       A: Hey, nächste Woche besuche ich den Papst persönlich{" "}
@@ -109,6 +114,7 @@ export const LocalPrepositions = [
     <Text>B: Nein danke, ich bin evangelisch;)</Text>
   </CompleteText>,
 
+  // eslint-disable-next-line react/jsx-key
   <Sequence>
     <CompleteText>
       <Text>A: Woher kommt Jana nochmal?</Text>
@@ -125,6 +131,7 @@ export const LocalPrepositions = [
     </CompleteText>
   </Sequence>,
 
+  // eslint-disable-next-line react/jsx-key
   <Sequence>
     <CompleteText>
       <Text>
@@ -142,6 +149,7 @@ export const LocalPrepositions = [
     </CompleteText>
   </Sequence>,
 
+  // eslint-disable-next-line react/jsx-key
   <Sequence>
     <CompleteText>
       <Text>
@@ -157,6 +165,7 @@ export const LocalPrepositions = [
     </CompleteText>
   </Sequence>,
 
+  // eslint-disable-next-line react/jsx-key
   <Sequence>
     <CompleteText>
       <Text>
@@ -172,6 +181,7 @@ export const LocalPrepositions = [
     </CompleteText>
   </Sequence>,
 
+  // eslint-disable-next-line react/jsx-key
   <Sequence>
     <CompleteText>
       <Text>A: Wo treffen wir uns jetzt?</Text>
@@ -190,6 +200,7 @@ export const LocalPrepositions = [
     </CompleteText>
   </Sequence>,
 
+  // eslint-disable-next-line react/jsx-key
   <Sequence>
     <CompleteText>
       <Text>
@@ -216,6 +227,7 @@ export const LocalPrepositions = [
     </CompleteText>
   </Sequence>,
 
+  // eslint-disable-next-line react/jsx-key
   <Sequence>
     <CompleteText>
       <Text>
@@ -241,6 +253,7 @@ export const LocalPrepositions = [
     </CompleteText>
   </Sequence>,
 
+  // eslint-disable-next-line react/jsx-key
   <Sequence>
     <CompleteText>
       <Text>Mein gestriger Tag:</Text>
@@ -257,17 +270,19 @@ export const LocalPrepositions = [
         <Entry value="nach" /> Hause gefahren. Maria hat nämlich gerade großen
         Liebeskummer und braucht meine Schulter zum Ausweinen.
       </Text>
+    </CompleteText>
+    <CompleteText>
       <Text>
         Wir sind gerade <Entry value="beim" /> Essen gewesen, als plötzlich
         Klaus, ihr Exfreund, vor der Tür stand.
       </Text>
-    </CompleteText>
-    <CompleteText>
       <Text>
         Er ist sichtlich gerade
         <Entry value="vom" autoFocus /> Sport gekommen, wie er da so dastand –
         im Trainingsanzug und ganz verschwitzt.
       </Text>
+    </CompleteText>
+    <CompleteText>
       <Text>
         „Maria“ sagte er, „bitte nimm mich zurück.“ Ich gehe auch so oft mit dir{" "}
         <Entry value="zum" /> Sport, wie du willst!“ Ich habe mich von ihnen
@@ -277,6 +292,7 @@ export const LocalPrepositions = [
     </CompleteText>
   </Sequence>,
 
+  // eslint-disable-next-line react/jsx-key
   <Sequence>
     <CompleteText>
       <Text>

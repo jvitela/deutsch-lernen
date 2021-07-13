@@ -5,5 +5,5 @@ interface TextProps {
 }
 
 export function Text({ children }: TextProps) {
-  return <p className="block text-xl md:text-base">{children}</p>;
+  return <p className="block text-xl md:text-base leading-10">{children}</p>;
 }

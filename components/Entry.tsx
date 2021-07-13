@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { EntryContext } from "contexts/EntryContext";
 import _upperFirst from "lodash/upperFirst";
+import _lowerFirst from "lodash/lowerFirst";
 import _trim from "lodash/trim";
 
 interface EntryProps
@@ -11,18 +12,16 @@ interface EntryProps
   upperFirst?: boolean;
 }
 
-const text =
-  "inline-block relative leading-4 border-b-2 w-16 mx-1 h-5 overflow-visible";
+const text = "inline-block relative border-b-2 w-20";
 
 type EntryState = "editing" | "submitted" | "success" | "error";
 
 const cls = {
-  success: "text-green-600",
-  error: "text-red-600 line-through",
+  textWrapper: "inline-block relative w-20 mx-1 leading-4 h-5 overflow-visible",
+  success: `${text} text-green-600 border-green-600`,
+  error: `${text} text-red-600 border-red-600 line-through`,
   question: `${text} text-blue-400 border-gray-400 focus:outline-none focus:border-blue-400 focus:bg-blue-50`,
-  correction: "absolute left-0 -bottom-4 text-green-600",
-  correct: `${text} border-green-400`,
-  wrong: `${text} border-red-400`,
+  correction: "absolute left-0 -bottom-5 text-green-600",
 };
 
 export function Entry({ value, upperFirst, ...rest }: EntryProps) {
@@ -46,7 +45,7 @@ export function Entry({ value, upperFirst, ...rest }: EntryProps) {
 
   console.log("Entry", { state, value, input: inputRef.current?.value });
   return (
-    <span className={getEntryClassName(state)}>
+    <span className={cls.textWrapper}>
       <input
         {...rest}
         ref={inputRef}
@@ -59,7 +58,9 @@ export function Entry({ value, upperFirst, ...rest }: EntryProps) {
 }
 
 function getValue(inputEl: HTMLInputElement, upperFirst: boolean) {
-  const inputValue = upperFirst ? _upperFirst(inputEl.value) : inputEl.value;
+  const inputValue = upperFirst
+    ? _upperFirst(inputEl.value)
+    : _lowerFirst(inputEl.value);
 
   return _trim(inputValue);
 }
@@ -70,8 +71,4 @@ function getInputClassName(state: EntryState) {
     : state === "error"
     ? cls.error
     : cls.question;
-}
-
-function getEntryClassName(state: EntryState) {
-  return state === "success" ? cls.correct : state === "error" ? cls.wrong : "";
 }

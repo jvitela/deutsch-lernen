@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { EntryContext } from "contexts/EntryContext";
 import { Button } from "components/Button";
 import { NextButton } from "components/NextButton";
-import { Text } from "./Text";
 
 export function CompleteText({ children }: { children: React.ReactNode }) {
   const [isReady, setReady] = useState(false);
@@ -16,7 +15,7 @@ export function CompleteText({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <form className="flex flex-col h-screen p-4">
+    <form className="flex flex-col h-full p-4">
       <main className="flex-grow">
         <EntryContext.Provider value={{ isReady, setResult }}>
           {children}

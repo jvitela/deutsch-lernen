@@ -34,7 +34,7 @@ export function OrderSentence({
   };
 
   return (
-    <div className="h-screen flex flex-col justify-between">
+    <div className="h-full flex flex-col justify-between">
       <header className="p-4">
         <p>{instructions}</p>
       </header>
