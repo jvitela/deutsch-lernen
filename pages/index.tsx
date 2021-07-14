@@ -1,10 +1,15 @@
 import Link from "next/link";
 import Head from "next/head";
 import React from "react";
+import twd from "utils/twd";
 
-const clsLink =
-  "w-full font-bold p-4 my-2 rounded text-center text-white bg-blue-500 " +
-  "focus:outline-none focus:ring hover:bg-blue-700";
+const clsLink = twd`
+  w-full p-4 my-2
+  font-bold text-center 
+  text-white bg-blue-500 rounded
+  focus:outline-none focus:ring 
+  hover:bg-blue-700
+`;
 
 export default function Home() {
   return (
@@ -14,7 +19,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-full">
         <header className="">
           <h1 className="px-4 py-8 text-center text-4xl text-blue-100 bg-blue-600">
             Deutsch Lernen
