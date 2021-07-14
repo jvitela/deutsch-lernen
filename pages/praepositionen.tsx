@@ -1,28 +1,17 @@
-import { GetStaticProps } from "next";
 import Head from "next/head";
 import shuffle from "lodash/shuffle";
-import range from "lodash/range";
 import React, { useState } from "react";
+import { Loading } from "components/Loading";
 import { ExerciseContext } from "contexts/ExerciseContext";
+import { useNoSSR } from "hooks/useNoSSR";
 import { AbbreviatedPrepositions } from "exercises/prepositions/AbbreviatedPrepositions";
 import { LocalPrepositions } from "exercises/prepositions/LocalPrepositions";
 
 const allExercises = [...AbbreviatedPrepositions, ...LocalPrepositions];
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  return {
-    props: {
-      sequence: shuffle(range(0, allExercises.length)),
-    },
-  };
-};
-
-interface PageProps {
-  sequence: number[];
-}
-
-export default function Praepositions({ sequence }: PageProps) {
-  const [exercises] = useState(() => sequence.map((idx) => allExercises[idx]));
+export default function Praepositions() {
+  const canRender = useNoSSR();
+  const [exercises] = useState(() => shuffle(allExercises));
   const [index, setIndex] = useState(0);
   const next = () => setIndex((idx) => idx + 1);
   const isFinished = index >= exercises.length;
@@ -36,10 +25,12 @@ export default function Praepositions({ sequence }: PageProps) {
 
       {isFinished ? (
         <p>Finished</p>
-      ) : (
+      ) : canRender ? (
         <ExerciseContext.Provider value={{ index, next }}>
           <React.Fragment key={index}>{exercises[index]}</React.Fragment>
         </ExerciseContext.Provider>
+      ) : (
+        <Loading />
       )}
     </React.Fragment>
   );
