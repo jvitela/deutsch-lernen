@@ -273,21 +273,21 @@ export const LocalPrepositions = [
     </CompleteText>
     <CompleteText>
       <Text>
-        Wir sind gerade <Entry value="beim" /> Essen gewesen, als plötzlich
-        Klaus, ihr Exfreund, vor der Tür stand.
+        Wir sind gerade <Entry value="beim" autoFocus /> Essen gewesen, als
+        plötzlich Klaus, ihr Exfreund, vor der Tür stand.
       </Text>
       <Text>
         Er ist sichtlich gerade
-        <Entry value="vom" autoFocus /> Sport gekommen, wie er da so dastand –
-        im Trainingsanzug und ganz verschwitzt.
+        <Entry value="vom" /> Sport gekommen, wie er da so dastand – im
+        Trainingsanzug und ganz verschwitzt.
       </Text>
     </CompleteText>
     <CompleteText>
       <Text>
         „Maria“ sagte er, „bitte nimm mich zurück.“ Ich gehe auch so oft mit dir{" "}
-        <Entry value="zum" /> Sport, wie du willst!“ Ich habe mich von ihnen
-        verabschiedet und bin <Entry value="nach" /> Hause gegangen. Das war mir
-        wirklich alles zu kindisch.
+        <Entry value="zum" autoFocus /> Sport, wie du willst!“ Ich habe mich von
+        ihnen verabschiedet und bin <Entry value="nach" /> Hause gegangen. Das
+        war mir wirklich alles zu kindisch.
       </Text>
     </CompleteText>
   </Sequence>,
