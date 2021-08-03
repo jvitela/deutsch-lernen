@@ -1,6 +1,11 @@
 import React from "react";
 
-export const ExerciseContext = React.createContext({
+export interface Exercise {
+  index: number;
+  next: (isSuccess: boolean) => void;
+}
+
+export const ExerciseContext = React.createContext<Exercise>({
   index: 0,
-  next: () => {},
+  next: (_: boolean) => {},
 });

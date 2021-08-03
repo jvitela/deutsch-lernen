@@ -15,14 +15,14 @@ export function CompleteText({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <form className="flex flex-col h-full p-4">
+    <form className="flex flex-col h-full p-4 md:h-auto">
       <main className="flex-grow">
         <EntryContext.Provider value={{ isReady, setResult }}>
           {children}
         </EntryContext.Provider>
       </main>
 
-      <footer>
+      <footer className="md:mt-3">
         {isReady ? (
           <NextButton variant={getVariant(results)} />
         ) : (

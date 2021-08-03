@@ -24,20 +24,22 @@ export default function Konjunktiv2() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {isFinished ? (
-        <p>Finished</p>
-      ) : canRender ? (
-        <ExerciseContext.Provider value={{ index, next }}>
-          <OrderSentence
-            key={index}
-            instructions={exercises[index].instructions}
-            answers={exercises[index].answers}
-            options={exercises[index].options}
-          />
-        </ExerciseContext.Provider>
-      ) : (
-        <Loading />
-      )}
+      <div className="container h-full md:max-w-lg mx-auto">
+        {isFinished ? (
+          <p>Finished</p>
+        ) : canRender ? (
+          <ExerciseContext.Provider value={{ index, next }}>
+            <OrderSentence
+              key={index}
+              instructions={exercises[index].instructions}
+              answers={exercises[index].answers}
+              options={exercises[index].options}
+            />
+          </ExerciseContext.Provider>
+        ) : (
+          <Loading />
+        )}
+      </div>
     </React.Fragment>
   );
 }

@@ -9,7 +9,11 @@ interface NextButtonProps {
 export function NextButton({ variant }: NextButtonProps) {
   const { next } = useContext(ExerciseContext);
   return (
-    <Button onClick={next} variant={variant} autoFocus>
+    <Button
+      onClick={() => next(variant === "success")}
+      variant={variant}
+      autoFocus
+    >
       Next
     </Button>
   );

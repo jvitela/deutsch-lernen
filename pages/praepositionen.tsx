@@ -11,10 +11,17 @@ const allExercises = [...AbbreviatedPrepositions, ...LocalPrepositions];
 
 export default function Praepositions() {
   const canRender = useNoSSR();
-  const [exercises] = useState(() => shuffle(allExercises));
+  const [exercises, setExercises] = useState(() => shuffle(allExercises));
   const [index, setIndex] = useState(0);
-  const next = () => setIndex((idx) => idx + 1);
   const isFinished = index >= exercises.length;
+
+  const next = (isSuccess: boolean) => {
+    setIndex((index) => index + 1);
+    if (!isSuccess) {
+      // On fail, just move the item to the end
+      setExercises((exercises) => exercises.concat(exercises[index]));
+    }
+  };
 
   return (
     <React.Fragment>
@@ -22,16 +29,17 @@ export default function Praepositions() {
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      {isFinished ? (
-        <p>Finished</p>
-      ) : canRender ? (
-        <ExerciseContext.Provider value={{ index, next }}>
-          <React.Fragment key={index}>{exercises[index]}</React.Fragment>
-        </ExerciseContext.Provider>
-      ) : (
-        <Loading />
-      )}
+      <div className="container h-full md:max-w-lg mx-auto">
+        {isFinished ? (
+          <p>Finished</p>
+        ) : canRender ? (
+          <ExerciseContext.Provider value={{ index, next }}>
+            <React.Fragment key={index}>{exercises[index]}</React.Fragment>
+          </ExerciseContext.Provider>
+        ) : (
+          <Loading />
+        )}
+      </div>
     </React.Fragment>
   );
 }
