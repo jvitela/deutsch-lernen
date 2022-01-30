@@ -32,8 +32,8 @@ export default function Home() {
           <Link href="/konjunktiv2">
             <a className={clsLink}>Konjunktiv II</a>
           </Link>
-          <Link href="/bedeutungen">
-            <a className={clsLink}>Bedeutungen</a>
+          <Link href="/kapitel_1/Personenbeschreibungen">
+            <a className={clsLink}>Personenbeschreibungen</a>
           </Link>
         </main>
       </div>
