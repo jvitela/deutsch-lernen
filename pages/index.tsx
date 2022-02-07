@@ -26,6 +26,9 @@ export default function Home() {
           </h1>
         </header>
         <main className="flex flex-col flex-grow justify-center p-4 container md:max-w-lg mx-auto">
+          <Link href="/deklination">
+            <a className={clsLink}>Deklination</a>
+          </Link>
           <Link href="/praepositionen">
             <a className={clsLink}>Präpositionen</a>
           </Link>
