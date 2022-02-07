@@ -12,23 +12,21 @@ interface Pair {
   desc: string;
   antonym: string;
 }
-
 interface SelectPairsOptions {
   pairs: ReadonlyArray<Pair>;
 }
 
 type Status = "idle" | "success" | "error" | "finished";
 
-interface Item {
-  // key: string;
-  value: Pair;
+interface Item<T> {
+  value: T;
   status: "enabled" | "selected" | "disabled";
 }
 
 interface State {
   status: Status;
-  items: ReadonlyArray<Item>;
-  table: ReadonlyArray<ReadonlyArray<number>>;
+  total: number;
+  completed: ReadonlyArray<number>;
   selectedKey?: number;
   selectedValue?: number;
 }
@@ -38,37 +36,37 @@ interface Action {
   payload?: number;
 }
 
-function isSuccess({ items, selectedKey, selectedValue }: State): boolean {
-  if (selectedValue === undefined || selectedKey === undefined) return false;
-  return items[selectedKey] === items[selectedValue];
-}
+// function isSuccess({ items, selectedKey, selectedValue }: State): boolean {
+//   if (selectedValue === undefined || selectedKey === undefined) return false;
+//   return items[selectedKey] === items[selectedValue];
+// }
 
-function isFinished(items: State["items"]): boolean {
-  return items.every((item) => item.status === "disabled");
-}
+// function isFinished(items: State["items"]): boolean {
+//   return items.every((item) => item.status === "disabled");
+// }
 
-function selectMatchingItem(state: State): State["items"] {
-  const { items, selectedKey, selectedValue } = state;
-  return items.map((item, idx) =>
-    idx === selectedKey && selectedKey === selectedValue
-      ? {
-          ...item,
-          status: "selected",
-        }
-      : item
-  );
-}
+// function selectMatchingItem(state: State): State["items"] {
+//   const { items, selectedKey, selectedValue } = state;
+//   return items.map((item, idx) =>
+//     idx === selectedKey && selectedKey === selectedValue
+//       ? {
+//           ...item,
+//           status: "selected",
+//         }
+//       : item
+//   );
+// }
 
-function clearSelectedItem(items: State["items"]): State["items"] {
-  return items.map((item) =>
-    item.status === "selected"
-      ? {
-          ...item,
-          status: "disabled",
-        }
-      : item
-  );
-}
+// function clearSelectedItem(items: State["items"]): State["items"] {
+//   return items.map((item) =>
+//     item.status === "selected"
+//       ? {
+//           ...item,
+//           status: "disabled",
+//         }
+//       : item
+//   );
+// }
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -85,29 +83,21 @@ function reducer(state: State, action: Action): State {
     case "setResult":
       return {
         ...state,
-        items: selectMatchingItem(state),
-        status: isSuccess(state) ? "success" : "error",
+        status: state.selectedKey === state.selectedValue ? "success" : "error",
       };
-    case "clearResult": {
-      const items = clearSelectedItem(state.items);
-      const status = isFinished(items) ? "finished" : "idle";
+
+    case "clearResult":
       return {
         ...state,
-        status,
-        items,
+        status: state.completed.length === state.total ? "finished" : "idle",
+        completed:
+          state.status === "success"
+            ? state.completed.concat(state.selectedKey!)
+            : state.completed,
         selectedKey: undefined,
         selectedValue: undefined,
       };
-    }
   }
-}
-
-function mapItems(pairs: ReadonlyArray<Pair>): ReadonlyArray<Item> {
-  return pairs.map((pair, idx) => ({
-    // key: pair.prop,
-    value: pair,
-    status: "enabled",
-  }));
 }
 
 function getBtnVariant(
@@ -125,19 +115,31 @@ function getBtnVariant(
 }
 
 function init(pairs: SelectPairsOptions["pairs"]): State {
-  const items = mapItems(pairs);
-  const indexes = range(items.length);
   return {
     status: "idle",
-    items,
-    table: [
-      shuffle(indexes), // keys
-      shuffle(indexes), // values
-    ],
+    total: pairs.length,
+    completed: [],
   };
 }
 
+function shuffleIndexes(length: number) {
+  const indexes = range(length);
+  return {
+    keys: shuffle(indexes),
+    values: shuffle(indexes),
+  };
+}
+
+function mapItems(pairs: SelectPairsOptions["pairs"]) {
+  return pairs.map((pair) => ({
+    value: pair,
+    status: "enabled",
+  }));
+}
+
 function SelectPairs({ pairs }: SelectPairsOptions) {
+  const [{ keys, values }] = useState(() => shuffleIndexes(pairs.length));
+  const [items] = useState(() => mapItems(pairs));
   const { next: finishExercise } = useContext(ExerciseContext);
   const [state, dispatch] = useReducer(reducer, pairs, init);
 
@@ -163,35 +165,45 @@ function SelectPairs({ pairs }: SelectPairsOptions) {
     }
   }, [state.status, finishExercise]);
 
-  const { items, table } = state;
-
   return (
     <div className="flex">
-      {table.map((rows, col) => (
-        <div className="flex-col flex-grow" key={col}>
-          {rows.map((idx, row) => (
-            <div className="p-2" key={`${col}:${row}`}>
-              <Button
-                variant={getBtnVariant(
-                  state.status,
-                  idx,
-                  col ? state.selectedValue : state.selectedKey
-                )}
-                title={items[idx].value.desc}
-                disabled={items[idx].status === "disabled"}
-                onClick={() =>
-                  dispatch({
-                    type: col ? "selectValue" : "selectKey",
-                    payload: idx,
-                  })
-                }
-              >
-                {col ? items[idx].value.antonym : items[idx].value.prop}
-              </Button>
-            </div>
-          ))}
-        </div>
-      ))}
+      <div className="flex-col flex-grow">
+        {keys.map((idx) => (
+          <div className="p-2" key={`keys-row-${idx}`}>
+            <Button
+              variant={getBtnVariant(state.status, idx, state.selectedKey)}
+              title={items[idx].value.desc}
+              disabled={state.completed.includes(idx)}
+              onClick={() =>
+                dispatch({
+                  type: "selectKey",
+                  payload: idx,
+                })
+              }
+            >
+              {items[idx].value.prop}
+            </Button>
+          </div>
+        ))}
+      </div>
+      <div className="flex-col flex-grow">
+        {values.map((idx) => (
+          <div className="p-2" key={`values-row-${idx}`}>
+            <Button
+              variant={getBtnVariant(state.status, idx, state.selectedValue)}
+              disabled={state.completed.includes(idx)}
+              onClick={() =>
+                dispatch({
+                  type: "selectValue",
+                  payload: idx,
+                })
+              }
+            >
+              {items[idx].value.antonym}
+            </Button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
