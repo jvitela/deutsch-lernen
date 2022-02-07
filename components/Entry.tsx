@@ -43,7 +43,6 @@ export function Entry({ value, upperFirst, ...rest }: EntryProps) {
     }
   }, [setResult, state, upperFirst, value]);
 
-  console.log("Entry", { state, value, input: inputRef.current?.value });
   return (
     <span className={cls.textWrapper}>
       <input
