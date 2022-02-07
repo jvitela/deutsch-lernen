@@ -3,7 +3,18 @@ import range from "lodash/range";
 
 type ArrayOfExercises = ReadonlyArray<ReactElement>;
 
+// TODO: Remove
 export interface Exercise {
+  index: number;
+  next: (isSuccess: boolean) => void;
+}
+
+export const ExerciseContext = React.createContext<Exercise>({
+  index: 0,
+  next: (_isSuccess: boolean) => {},
+});
+
+interface Exercise2 {
   exercises: ArrayOfExercises;
   index: number;
   total: number;
@@ -14,7 +25,7 @@ export interface Exercise {
   next: (isSuccess: boolean) => void;
 }
 
-export const ExerciseContext = React.createContext<Exercise>({
+const ExerciseContext2 = React.createContext<Exercise2>({
   exercises: [],
   index: 0,
   total: 0,
@@ -62,7 +73,7 @@ export function ExerciseProvider({
   );
 
   return (
-    <ExerciseContext.Provider
+    <ExerciseContext2.Provider
       value={{
         exercises,
         index,
@@ -75,11 +86,11 @@ export function ExerciseProvider({
       }}
     >
       {children}
-    </ExerciseContext.Provider>
+    </ExerciseContext2.Provider>
   );
 }
 
-export const useExerciseContext = () => useContext(ExerciseContext);
+export const useExerciseContext = () => useContext(ExerciseContext2);
 
 export const ActiveExercise = () => {
   const { exercises, numTries, index } = useExerciseContext();
