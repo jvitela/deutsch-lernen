@@ -64,11 +64,11 @@ export function OrderSentence({
         </div>
         {status === "error" && (
           <p className="text-red-700 p-4">
-            {answers.map((answer) => (
-              <>
+            {answers.map((answer, idx) => (
+              <span key={idx}>
                 {answer}
                 <br />
-              </>
+              </span>
             ))}
           </p>
         )}

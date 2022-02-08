@@ -3,7 +3,11 @@ import React, { useReducer, useEffect, useState, useContext } from "react";
 import shuffle from "lodash/shuffle";
 import range from "lodash/range";
 import { useNoSSR } from "hooks/useNoSSR";
-import { ExerciseContext } from "contexts/ExerciseContext";
+import {
+  ActiveExercise,
+  ExerciseProvider,
+  useExerciseContext,
+} from "contexts/ExerciseContext";
 import { Loading } from "components/Loading";
 import { Button, ButtonVariants } from "components/Button";
 
@@ -132,7 +136,7 @@ function init(pairs: SelectPairsOptions["pairs"]): State {
 }
 
 function SelectPairs({ pairs }: SelectPairsOptions) {
-  const { next: finishExercise } = useContext(ExerciseContext);
+  const { next: finishExercise } = useExerciseContext();
   const [state, dispatch] = useReducer(reducer, pairs, init);
 
   useEffect(() => {
@@ -201,12 +205,14 @@ const allExercises = [
   },
 ];
 
+function getAllExercises() {
+  return allExercises.map((pairs, idx) => (
+    <SelectPairs key={idx} pairs={pairs} />
+  ));
+}
+
 export default function Bedeutungen() {
-  const canRender = useNoSSR();
-  const [exercises] = useState(() => allExercises);
-  const [index, setIndex] = useState(0);
-  const next = () => setIndex((idx) => idx + 1);
-  const isFinished = index >= exercises.length;
+  const [exercises] = useState(getAllExercises);
 
   return (
     <React.Fragment>
@@ -214,18 +220,26 @@ export default function Bedeutungen() {
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <div className="container h-full md:max-w-lg mx-auto">
-        {isFinished ? (
-          <p>Finished</p>
-        ) : canRender ? (
-          <ExerciseContext.Provider value={{ index, next }}>
-            <SelectPairs pairs={exercises[index]} />
-          </ExerciseContext.Provider>
-        ) : (
-          <Loading />
-        )}
-      </div>
+      <ExerciseProvider exercises={exercises}>
+        <Body />
+      </ExerciseProvider>
     </React.Fragment>
+  );
+}
+
+function Body() {
+  const canRender = useNoSSR();
+  const { isFinished } = useExerciseContext();
+
+  return (
+    <div className="container h-full md:max-w-lg mx-auto">
+      {isFinished ? (
+        <p>Finished</p>
+      ) : canRender ? (
+        <ActiveExercise />
+      ) : (
+        <Loading />
+      )}
+    </div>
   );
 }

@@ -1,11 +1,6 @@
 import Head from "next/head";
 import shuffle from "lodash/shuffle";
-import React, {
-  PropsWithChildren,
-  ReactChildren,
-  ReactElement,
-  useState,
-} from "react";
+import React, { useState } from "react";
 import { Loading } from "components/Loading";
 import {
   ActiveExercise,
@@ -25,6 +20,7 @@ interface EntryProps {
   ref?: number;
   upperFirst?: boolean;
 }
+
 type Phrase = ReadonlyArray<string | EntryProps>;
 type ArrayOfPhrases = ReadonlyArray<Phrase>;
 
@@ -136,6 +132,7 @@ const dativ: ExerciseData = {
     ["Mit ", { value: "dem", ref: 5 }, " Essen spielt man nicht."],
   ],
 };
+
 const genitiv: ExerciseData = {
   refs: {
     1: "Nomen, maskulin, Singular",
@@ -183,7 +180,7 @@ function getExercises({ phrases, refs }: ExerciseData) {
       <Text>
         {contents.map((elem, numEl) =>
           typeof elem === "string" ? (
-            elem // string
+            elem
           ) : (
             <Entry
               key={`${idx}-${numEl}`}
@@ -212,17 +209,20 @@ function initExercises() {
 
 export default function Deklination() {
   const [exercises] = useState(initExercises);
+
   return (
-    <ExerciseProvider exercises={exercises}>
+    <>
       <PageHead />
       <div className="container h-full md:max-w-lg mx-auto">
         <header className="p-4">
           Ergänze den bestimmten Artikel im Nominativ, Akkusativ, Dativ oder
           Genitiv
         </header>
-        <Body />
+        <ExerciseProvider exercises={exercises}>
+          <Body />
+        </ExerciseProvider>
       </div>
-    </ExerciseProvider>
+    </>
   );
 }
 

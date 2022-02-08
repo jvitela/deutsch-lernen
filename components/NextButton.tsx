@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { ExerciseContext } from "contexts/ExerciseContext";
+import React from "react";
+import { useExerciseContext } from "contexts/ExerciseContext";
 import { Button } from "components/Button";
 
 interface NextButtonProps {
@@ -7,7 +7,7 @@ interface NextButtonProps {
 }
 
 export function NextButton({ variant }: NextButtonProps) {
-  const { next } = useContext(ExerciseContext);
+  const { next } = useExerciseContext();
   return (
     <Button
       onClick={() => next(variant === "success")}

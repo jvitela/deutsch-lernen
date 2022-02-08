@@ -3,7 +3,11 @@ import React, { useReducer, useEffect, useState, useContext } from "react";
 import shuffle from "lodash/shuffle";
 import range from "lodash/range";
 import { useNoSSR } from "hooks/useNoSSR";
-import { ExerciseContext } from "contexts/ExerciseContext";
+import {
+  ActiveExercise,
+  ExerciseProvider,
+  useExerciseContext,
+} from "contexts/ExerciseContext";
 import { Loading } from "components/Loading";
 import { Button, ButtonVariants } from "components/Button";
 
@@ -36,38 +40,6 @@ interface Action {
   payload?: number;
 }
 
-// function isSuccess({ items, selectedKey, selectedValue }: State): boolean {
-//   if (selectedValue === undefined || selectedKey === undefined) return false;
-//   return items[selectedKey] === items[selectedValue];
-// }
-
-// function isFinished(items: State["items"]): boolean {
-//   return items.every((item) => item.status === "disabled");
-// }
-
-// function selectMatchingItem(state: State): State["items"] {
-//   const { items, selectedKey, selectedValue } = state;
-//   return items.map((item, idx) =>
-//     idx === selectedKey && selectedKey === selectedValue
-//       ? {
-//           ...item,
-//           status: "selected",
-//         }
-//       : item
-//   );
-// }
-
-// function clearSelectedItem(items: State["items"]): State["items"] {
-//   return items.map((item) =>
-//     item.status === "selected"
-//       ? {
-//           ...item,
-//           status: "disabled",
-//         }
-//       : item
-//   );
-// }
-
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case "selectKey":
@@ -87,13 +59,16 @@ function reducer(state: State, action: Action): State {
       };
 
     case "clearResult":
+      const completed =
+        state.status === "success"
+          ? state.completed.concat(state.selectedKey!)
+          : state.completed;
+      const status = completed.length === state.total ? "finished" : "idle";
+
       return {
         ...state,
-        status: state.completed.length === state.total ? "finished" : "idle",
-        completed:
-          state.status === "success"
-            ? state.completed.concat(state.selectedKey!)
-            : state.completed,
+        status,
+        completed,
         selectedKey: undefined,
         selectedValue: undefined,
       };
@@ -140,7 +115,7 @@ function mapItems(pairs: SelectPairsOptions["pairs"]) {
 function SelectPairs({ pairs }: SelectPairsOptions) {
   const [{ keys, values }] = useState(() => shuffleIndexes(pairs.length));
   const [items] = useState(() => mapItems(pairs));
-  const { next: finishExercise } = useContext(ExerciseContext);
+  const { next: finishExercise } = useExerciseContext();
   const [state, dispatch] = useReducer(reducer, pairs, init);
 
   useEffect(() => {
@@ -273,10 +248,9 @@ const personProperties: ReadonlyArray<Pair> = [
 ];
 
 export default function Personenbeschreibungen() {
-  const canRender = useNoSSR();
-  const [index, setIndex] = useState(0);
-  const next = () => setIndex((idx) => idx + 1);
-  const isFinished = index >= 1;
+  const [exercises] = useState(() => [
+    <SelectPairs key={1} pairs={personProperties} />,
+  ]);
 
   return (
     <React.Fragment>
@@ -284,18 +258,26 @@ export default function Personenbeschreibungen() {
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <div className="container h-full md:max-w-lg mx-auto">
-        {isFinished ? (
-          <p>Finished</p>
-        ) : canRender ? (
-          <ExerciseContext.Provider value={{ index, next }}>
-            <SelectPairs pairs={personProperties} />
-          </ExerciseContext.Provider>
-        ) : (
-          <Loading />
-        )}
-      </div>
+      <ExerciseProvider exercises={exercises}>
+        <Body />
+      </ExerciseProvider>
     </React.Fragment>
+  );
+}
+
+function Body() {
+  const canRender = useNoSSR();
+  const { isFinished } = useExerciseContext();
+
+  return (
+    <div className="container h-full md:max-w-lg mx-auto">
+      {isFinished ? (
+        <p>Finished</p>
+      ) : canRender ? (
+        <ActiveExercise />
+      ) : (
+        <Loading />
+      )}
+    </div>
   );
 }

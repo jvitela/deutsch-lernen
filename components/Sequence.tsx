@@ -1,31 +1,36 @@
-import React, { useContext, useState } from "react";
-import { ExerciseContext } from "contexts/ExerciseContext";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
+import {
+  ActiveExercise,
+  ExerciseProvider,
+  useExerciseContext,
+} from "contexts/ExerciseContext";
 
 interface SequenceProps {
-  children: React.ReactNode;
+  children: ReactElement[];
 }
 
 export function Sequence({ children }: SequenceProps) {
-  const { next: nextExcercise } = useContext(ExerciseContext);
-  const [index, setIndex] = useState(0);
-  const [hasError, setHasError] = useState(false);
-  const sentences = React.Children.toArray(children);
-  const current = sentences[index];
-
-  const next = (isSuccess: boolean) => {
-    if (!isSuccess) {
-      setHasError(true);
-    }
-    if (index + 1 < sentences.length) {
-      setIndex((idx) => idx + 1);
-    } else {
-      nextExcercise(!hasError);
-    }
-  };
+  const { next } = useExerciseContext();
 
   return (
-    <ExerciseContext.Provider value={{ index, next }}>
-      {current}
-    </ExerciseContext.Provider>
+    <ExerciseProvider exercises={children}>
+      <Sentence nextExcercise={next} />
+    </ExerciseProvider>
   );
+}
+
+interface SentenceProps {
+  nextExcercise: (isSuccess: boolean) => void;
+}
+
+function Sentence({ nextExcercise }: SentenceProps) {
+  const { isFinished, numFailure } = useExerciseContext();
+
+  useEffect(() => {
+    if (isFinished) {
+      nextExcercise(numFailure === 0);
+    }
+  }, [isFinished, nextExcercise, numFailure]);
+
+  return <ActiveExercise />;
 }
