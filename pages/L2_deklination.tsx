@@ -211,18 +211,15 @@ export default function Deklination() {
   const [exercises] = useState(initExercises);
 
   return (
-    <>
-      <PageHead />
-      <div className="container h-full md:max-w-lg mx-auto">
-        <header className="p-4">
-          Ergänze den bestimmten Artikel im Nominativ, Akkusativ, Dativ oder
-          Genitiv
-        </header>
-        <ExerciseProvider exercises={exercises}>
-          <Body />
-        </ExerciseProvider>
-      </div>
-    </>
+    <div className="container h-full md:max-w-lg mx-auto">
+      <header className="p-4">
+        Ergänze den bestimmten Artikel im Nominativ, Akkusativ, Dativ oder
+        Genitiv
+      </header>
+      <ExerciseProvider exercises={exercises}>
+        <Body />
+      </ExerciseProvider>
+    </div>
   );
 }
 
@@ -243,10 +240,3 @@ function Body() {
     </>
   );
 }
-
-const PageHead = () => (
-  <Head>
-    <title>Create Next App</title>
-    <link rel="icon" href="/favicon.ico" />
-  </Head>
-);

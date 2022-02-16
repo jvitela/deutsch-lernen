@@ -28,16 +28,9 @@ function getAllExercises() {
 export default function Konjunktiv2() {
   const [exercises] = useState(() => shuffle(getAllExercises()));
   return (
-    <React.Fragment>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <ExerciseProvider exercises={exercises}>
-        <Body />
-      </ExerciseProvider>
-    </React.Fragment>
+    <ExerciseProvider exercises={exercises}>
+      <Body />
+    </ExerciseProvider>
   );
 }
 

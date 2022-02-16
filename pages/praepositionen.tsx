@@ -17,15 +17,9 @@ export default function Praepositions() {
   const [exercises] = useState(() => shuffle(allExercises));
 
   return (
-    <React.Fragment>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <ExerciseProvider exercises={exercises}>
-        <Body />
-      </ExerciseProvider>
-    </React.Fragment>
+    <ExerciseProvider exercises={exercises}>
+      <Body />
+    </ExerciseProvider>
   );
 }
 
