@@ -2,32 +2,30 @@ import Head from "next/head";
 import shuffle from "lodash/shuffle";
 import React, { useState } from "react";
 import { Loading } from "components/Loading";
-import {
-  ActiveExercise,
-  ExerciseProvider,
-  useExerciseContext,
-} from "contexts/ExerciseContext";
+import { ExerciseProvider, useExerciseContext } from "contexts/ExerciseContext";
 import { useNoSSR } from "hooks/useNoSSR";
 import { CompleteText } from "components/CompleteText";
-import { Entry } from "components/Entry";
+import { Entry, EntryProps } from "components/Entry";
 import { Text } from "components/Text";
 import { ProgressBar } from "components/ProgressBar";
 
 type RefsTable = Record<number, string>;
 
-interface EntryProps {
+interface EntryData {
   value: string;
   ref?: number;
   upperFirst?: boolean;
 }
 
-type Phrase = ReadonlyArray<string | EntryProps>;
+type Phrase = ReadonlyArray<string | EntryData>;
 type ArrayOfPhrases = ReadonlyArray<Phrase>;
 
 interface ExerciseData {
   refs: RefsTable;
   phrases: ArrayOfPhrases;
 }
+
+type ExerciseItem = string | EntryProps;
 
 const nominativ: ExerciseData = {
   refs: {
@@ -174,69 +172,110 @@ const genitiv: ExerciseData = {
   ],
 };
 
-function getExercises({ phrases, refs }: ExerciseData) {
-  return phrases.map((contents, idx) => (
-    <CompleteText key={idx}>
-      <Text>
-        {contents.map((elem, numEl) =>
-          typeof elem === "string" ? (
-            elem
-          ) : (
-            <Entry
-              key={`${idx}-${numEl}`}
-              value={elem.value}
-              autoFocus
-              title={elem.ref ? refs[elem.ref] : undefined}
-              upperFirst={elem.upperFirst}
-            />
-          )
-        )}
-      </Text>
-    </CompleteText>
-  ));
+function getExercises({
+  phrases,
+  refs,
+}: ExerciseData): ReadonlyArray<ReadonlyArray<ExerciseItem>> {
+  return phrases.map((contents, idx) => {
+    let numEntries = 0;
+    return contents.map((elem, numEl) =>
+      typeof elem === "string"
+        ? elem
+        : {
+            value: elem.value,
+            autoFocus: numEntries++ === 0,
+            title: elem.ref ? refs[elem.ref] : undefined,
+            upperFirst: elem.upperFirst,
+          }
+    );
+  });
 }
 
 function initExercises() {
-  const allExercises = ([] as Array<JSX.Element>).concat(
+  const allExercises = (
+    [] as ReadonlyArray<ReadonlyArray<ExerciseItem>>
+  ).concat(
     getExercises(nominativ),
     getExercises(dativ),
     getExercises(akkusativ),
     getExercises(genitiv)
   );
 
-  return shuffle(allExercises);
+  return shuffle(allExercises).slice(0, 10);
 }
 
 export default function Deklination() {
   const [exercises] = useState(initExercises);
 
+  console.log("Deklination::render", exercises);
   return (
-    <div className="container h-full md:max-w-lg mx-auto">
-      <header className="p-4">
-        Ergänze den bestimmten Artikel im Nominativ, Akkusativ, Dativ oder
-        Genitiv
-      </header>
+    <div className="h-full container md:max-w-lg mx-auto flex flex-col py-2">
       <ExerciseProvider exercises={exercises}>
+        <Progress />
+        <Instructions />
         <Body />
       </ExerciseProvider>
     </div>
   );
 }
 
-function Body() {
-  const canRender = useNoSSR();
-  const { isFinished, numSuccess, total } = useExerciseContext();
+function Instructions() {
+  return (
+    <header className="p-4">
+      <h1 className="font-bold text-lg">Ergänzen Sie den Satz</h1>
+      <p className="">
+        Ergänze den bestimmten Artikel im Nominativ, Akkusativ, Dativ oder
+        Genitiv
+      </p>
+    </header>
+  );
+}
+
+function Progress() {
+  const { numSuccess, total } = useExerciseContext();
 
   return (
-    <>
+    <div className="py-2 px-4">
       <ProgressBar total={total} progress={numSuccess} />
+    </div>
+  );
+}
+
+function Body() {
+  const canRender = useNoSSR();
+  const { isFinished, exercises, numTries, index } = useExerciseContext();
+  const contents = exercises[index] as ReadonlyArray<ExerciseItem>;
+  return (
+    <div className="flex grow py-2 px-4">
       {isFinished ? (
         <p>Finished</p>
       ) : canRender ? (
-        <ActiveExercise />
+        <Exercise key={numTries} contents={contents} />
       ) : (
         <Loading />
       )}
-    </>
+    </div>
+  );
+}
+
+function Exercise({ contents }: { contents: ReadonlyArray<ExerciseItem> }) {
+  return (
+    <CompleteText>
+      <Text>
+        {contents.map((entry, idx) =>
+          typeof entry === "string" ? (
+            entry
+          ) : (
+            <Entry
+              key={`${idx}`}
+              value={entry.value}
+              autoFocus
+              title={entry.title}
+              upperFirst={entry.upperFirst}
+            />
+          )
+        )}
+      </Text>
+    </CompleteText>
   );
 }

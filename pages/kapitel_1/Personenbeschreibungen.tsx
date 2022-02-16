@@ -142,7 +142,7 @@ function SelectPairs({ pairs }: SelectPairsOptions) {
 
   return (
     <div className="flex">
-      <div className="flex-col flex-grow">
+      <div className="flex-col grow">
         {keys.map((idx) => (
           <div className="p-2" key={`keys-row-${idx}`}>
             <Button
@@ -161,7 +161,7 @@ function SelectPairs({ pairs }: SelectPairsOptions) {
           </div>
         ))}
       </div>
-      <div className="flex-col flex-grow">
+      <div className="flex-col grow">
         {values.map((idx) => (
           <div className="p-2" key={`values-row-${idx}`}>
             <Button

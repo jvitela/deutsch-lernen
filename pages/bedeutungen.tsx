@@ -166,7 +166,7 @@ function SelectPairs({ pairs }: SelectPairsOptions) {
   return (
     <div className="flex">
       {table.map((rows, col) => (
-        <div className="flex-col flex-grow" key={col}>
+        <div className="flex-col grow" key={col}>
           {rows.map((idx, row) => (
             <div className="p-2" key={`${col}:${row}`}>
               <Button

@@ -4,7 +4,7 @@ import _upperFirst from "lodash/upperFirst";
 import _lowerFirst from "lodash/lowerFirst";
 import _trim from "lodash/trim";
 
-interface EntryProps
+export interface EntryProps
   extends JSX.IntrinsicAttributes,
     React.ClassAttributes<HTMLInputElement>,
     React.InputHTMLAttributes<HTMLInputElement> {

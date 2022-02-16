@@ -18,7 +18,7 @@ export default function Home() {
           Deutsch Lernen
         </h1>
       </header>
-      <main className="flex flex-col flex-grow justify-center p-4 container md:max-w-lg mx-auto">
+      <main className="flex flex-col grow justify-center p-4 container md:max-w-lg mx-auto">
         <Link href="/L2_deklination">
           <a className={clsLink}>Deklination</a>
         </Link>

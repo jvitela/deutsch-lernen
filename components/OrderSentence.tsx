@@ -38,8 +38,8 @@ export function OrderSentence({
       <header className="p-4">
         <p>{instructions}</p>
       </header>
-      <main className="flex flex-col flex-grow">
-        <div className="flex-grow p-4 bg-gray-100">
+      <main className="flex flex-col grow">
+        <div className="grow p-4 bg-gray-100">
           {toggles.selected.map((option) => (
             <PillButton
               key={option.id}

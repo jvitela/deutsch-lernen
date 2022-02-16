@@ -1,7 +1,7 @@
 import React, { ReactElement, useCallback, useContext, useState } from "react";
 import range from "lodash/range";
 
-type ArrayOfExercises = ReadonlyArray<ReactElement>;
+type ArrayOfExercises = ReadonlyArray<ReactElement> | ReadonlyArray<object>;
 
 type Exercise = {
   exercises: ArrayOfExercises;
