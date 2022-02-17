@@ -3,7 +3,7 @@ import { useExerciseContext } from "contexts/ExerciseContext";
 import { Button } from "components/Button";
 
 interface NextButtonProps {
-  variant: "success" | "error" | "warning";
+  variant: "success" | "error" | "warning" | "default";
 }
 
 export function NextButton({ variant }: NextButtonProps) {

@@ -44,5 +44,9 @@ function getVariant(results: { success: number; error: number }) {
     return "success";
   }
 
-  return "warning";
+  if (results.success && results.error) {
+    return "warning";
+  }
+
+  return "default";
 }
