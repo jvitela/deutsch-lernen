@@ -27,11 +27,13 @@ const ExerciseContext = React.createContext<Exercise>({
 
 interface ExerciseProviderOptions {
   exercises: ArrayOfExercises;
+  tryOnce: boolean;
   children: React.ReactNode;
 }
 
 export function ExerciseProvider({
   exercises,
+  tryOnce = false,
   children,
 }: ExerciseProviderOptions) {
   const [pos, setPos] = useState(0);
@@ -53,12 +55,12 @@ export function ExerciseProvider({
       // Always increment the position
       setPos((pos) => pos + 1);
 
-      if (!isSuccess) {
+      if (!isSuccess && !tryOnce) {
         // On fail, just append the index again to the end
         setIndexes((indexes) => indexes.concat(index));
       }
     },
-    [index, isFinished]
+    [index, isFinished, tryOnce]
   );
 
   return (

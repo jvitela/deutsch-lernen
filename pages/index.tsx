@@ -34,6 +34,9 @@ export default function Home() {
         <Link href="/kapitel_1/Personenbeschreibungen">
           <a className={clsLink}>Personenbeschreibungen</a>
         </Link>
+        <Link href="/Partizip2">
+          <a className={clsLink}>Partizip 2</a>
+        </Link>
       </main>
     </div>
   );
